@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="vCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#0EA5E9" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <linearGradient id="rPurpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="50%" stop-color="#9333EA" />
+      <stop offset="100%" stop-color="#6B21A8" />
+    </linearGradient>
+    <linearGradient id="highlightGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E0F2FE" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0EA5E9" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="url(#bgGrad)" stroke="#1E293B" stroke-width="4" />
+
+  <g filter="url(#dropShadow)">
+    <path d="M 110 140 L 165 140 L 230 330 C 235 345, 245 355, 256 355 C 267 355, 277 345, 282 330 L 347 140 L 402 140 L 282 370 C 270 395, 242 395, 230 370 Z" fill="url(#vCyanGrad)" />
+    <path d="M 125 155 L 155 155 L 222 350 L 200 350 Z" fill="url(#highlightGrad)" opacity="0.8" />
+    <path d="M 256 140 L 340 140 C 385 140, 410 165, 410 205 C 410 245, 385 270, 340 270 L 295 270 L 375 370 L 320 370 L 250 280 L 256 250 L 335 250 C 362 250, 378 235, 378 205 C 378 175, 362 160, 335 160 L 256 160 Z" fill="url(#rPurpleGrad)" />
+    <polygon points="280,175 320,195 280,215" fill="#38BDF8" filter="url(#neonGlow)" />
+    <g transform="translate(196, 415) scale(0.8)">
+      <polygon points="15,0 19,10 30,10 21,17 24,28 15,21 6,28 9,17 0,10 11,10" fill="#F59E0B" />
+      <polygon points="45,0 49,10 60,10 51,17 54,28 45,21 36,28 39,17 30,10 41,10" fill="#F59E0B" />
+      <polygon points="75,0 79,10 90,10 81,17 84,28 75,21 66,28 69,17 60,10 71,10" fill="#F59E0B" />
+      <polygon points="105,0 109,10 120,10 111,17 114,28 105,21 96,28 99,17 90,10 101,10" fill="#F59E0B" />
+      <polygon points="135,0 139,10 150,10 141,17 144,28 135,21 126,28 129,17 120,10 131,10" fill="#F59E0B" />
+    </g>
+  </g>
+</svg>
