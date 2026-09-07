@@ -6,6 +6,9 @@ type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id"> & {
   error?: string;
 };
 
+/**
+ * ラベル、入力欄、バリデーションエラーを表示する。
+ */
 export function FormField({
   id,
   label,

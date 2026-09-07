@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+/**
+ * アプリケーションのトップページを表示する。
+ */
 export default function Home() {
   return (
     <main>
