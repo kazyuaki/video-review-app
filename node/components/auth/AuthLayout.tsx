@@ -9,6 +9,9 @@ type AuthLayoutProps = {
   footer: ReactNode;
 };
 
+/**
+ * 会員登録・ログイン画面で共通するレイアウトを表示する。
+ */
 export function AuthLayout({
   title,
   description,

@@ -2,6 +2,9 @@ import Link from "next/link";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
+/**
+ * 会員登録ページを表示する。
+ */
 export default function RegisterPage() {
   return (
     <AuthLayout

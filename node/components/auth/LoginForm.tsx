@@ -3,8 +3,8 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { api } from "@/lib/api";
 import { FormField } from "@/components/auth/FormField";
+import { api } from "@/lib/api";
 
 type ValidationErrors = Record<string, string[]>;
 
@@ -14,15 +14,13 @@ type ErrorResponse = {
 };
 
 /**
- * 会員登録フォームを表示し、会員登録APIへの送信を処理する。
+ * ログインフォームを表示し、ログインAPIへの送信を処理する。
  */
-export function RegisterForm() {
+export function LoginForm() {
   const router = useRouter();
 
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,20 +35,19 @@ export function RegisterForm() {
     try {
       await api.get("/sanctum/csrf-cookie");
 
-      await api.post("/api/register", {
-        name,
+      await api.post("/api/login", {
         email,
         password,
-        password_confirmation: passwordConfirmation,
       });
 
       router.push("/");
+      router.refresh();
     } catch (error) {
       if (axios.isAxiosError<ErrorResponse>(error)) {
         setErrors(error.response?.data.errors ?? {});
         setMessage(
           error.response?.data.message ??
-            "会員登録に失敗しました。もう一度お試しください。",
+            "ログインに失敗しました。もう一度お試しください。",
         );
       } else {
         setMessage("予期しないエラーが発生しました。");
@@ -73,18 +70,6 @@ export function RegisterForm() {
 
       <form onSubmit={handleSubmit} noValidate className="space-y-5">
         <FormField
-          id="name"
-          name="name"
-          type="text"
-          label="ユーザー名"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          autoComplete="name"
-          placeholder="山田 太郎"
-          error={errors.name?.[0]}
-        />
-
-        <FormField
           id="email"
           name="email"
           type="email"
@@ -103,20 +88,9 @@ export function RegisterForm() {
           label="パスワード"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          autoComplete="new-password"
-          placeholder="8文字以上で入力"
+          autoComplete="current-password"
+          placeholder="パスワードを入力"
           error={errors.password?.[0]}
-        />
-
-        <FormField
-          id="password_confirmation"
-          name="password_confirmation"
-          type="password"
-          label="確認用パスワード"
-          value={passwordConfirmation}
-          onChange={(event) => setPasswordConfirmation(event.target.value)}
-          autoComplete="new-password"
-          placeholder="もう一度入力してください"
         />
 
         <button
@@ -124,7 +98,7 @@ export function RegisterForm() {
           disabled={isSubmitting}
           className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSubmitting ? "登録中..." : "アカウントを作成"}
+          {isSubmitting ? "ログイン中..." : "ログイン"}
         </button>
       </form>
     </>
