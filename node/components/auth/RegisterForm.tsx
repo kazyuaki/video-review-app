@@ -32,6 +32,32 @@ export function RegisterForm() {
 
     setErrors({});
     setMessage("");
+
+    const validationErrors: ValidationErrors = {};
+
+    if (!name.trim()) {
+      validationErrors.name = ["ユーザー名を入力してください。"];
+    }
+
+    if (!email.trim()) {
+      validationErrors.email = ["メールアドレスを入力してください。"];
+    }
+
+    if (!password) {
+      validationErrors.password = ["パスワードを入力してください。"];
+    }
+
+    if (!passwordConfirmation) {
+      validationErrors.password_confirmation = [
+        "確認用パスワードを入力してください。",
+      ];
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -117,6 +143,7 @@ export function RegisterForm() {
           onChange={(event) => setPasswordConfirmation(event.target.value)}
           autoComplete="new-password"
           placeholder="もう一度入力してください"
+          error={errors.password_confirmation?.[0]}
         />
 
         <button
