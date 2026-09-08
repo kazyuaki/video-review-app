@@ -1,17 +1,12 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { api } from "@/lib/api";
+import { parseApiError } from "@/lib/apiError";
+import { validateRequiredFields } from "@/lib/validation";
 import { FormField } from "@/components/auth/FormField";
-
-type ValidationErrors = Record<string, string[]>;
-
-type ErrorResponse = {
-  message: string;
-  errors?: ValidationErrors;
-};
+import type { ValidationErrors } from "@/types/api";
 
 /**
  * 会員登録フォームを表示し、会員登録APIへの送信を処理する。
@@ -33,25 +28,15 @@ export function RegisterForm() {
     setErrors({});
     setMessage("");
 
-    const validationErrors: ValidationErrors = {};
-
-    if (!name.trim()) {
-      validationErrors.name = ["ユーザー名を入力してください。"];
-    }
-
-    if (!email.trim()) {
-      validationErrors.email = ["メールアドレスを入力してください。"];
-    }
-
-    if (!password) {
-      validationErrors.password = ["パスワードを入力してください。"];
-    }
-
-    if (!passwordConfirmation) {
-      validationErrors.password_confirmation = [
-        "確認用パスワードを入力してください。",
-      ];
-    }
+    const validationErrors = validateRequiredFields({
+      name: { value: name.trim(), label: "ユーザー名" },
+      email: { value: email.trim(), label: "メールアドレス" },
+      password: { value: password, label: "パスワード" },
+      password_confirmation: {
+        value: passwordConfirmation,
+        label: "確認用パスワード",
+      },
+    });
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -72,15 +57,13 @@ export function RegisterForm() {
 
       router.push("/");
     } catch (error) {
-      if (axios.isAxiosError<ErrorResponse>(error)) {
-        setErrors(error.response?.data.errors ?? {});
-        setMessage(
-          error.response?.data.message ??
-            "会員登録に失敗しました。もう一度お試しください。",
-        );
-      } else {
-        setMessage("予期しないエラーが発生しました。");
-      }
+      const apiError = parseApiError(
+        error,
+        "会員登録に失敗しました。もう一度お試しください。",
+      );
+
+      setErrors(apiError.errors);
+      setMessage(apiError.message);
     } finally {
       setIsSubmitting(false);
     }

@@ -1,17 +1,12 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { FormField } from "@/components/auth/FormField";
 import { api } from "@/lib/api";
-
-type ValidationErrors = Record<string, string[]>;
-
-type ErrorResponse = {
-  message: string;
-  errors?: ValidationErrors;
-};
+import { parseApiError } from "@/lib/apiError";
+import { validateRequiredFields } from "@/lib/validation";
+import type { ValidationErrors } from "@/types/api";
 
 /**
  * ログインフォームを表示し、ログインAPIへの送信を処理する。
@@ -30,6 +25,17 @@ export function LoginForm() {
 
     setErrors({});
     setMessage("");
+
+    const validationErrors = validateRequiredFields({
+      email: { value: email.trim(), label: "メールアドレス" },
+      password: { value: password, label: "パスワード" },
+    });
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -43,15 +49,13 @@ export function LoginForm() {
       router.push("/");
       router.refresh();
     } catch (error) {
-      if (axios.isAxiosError<ErrorResponse>(error)) {
-        setErrors(error.response?.data.errors ?? {});
-        setMessage(
-          error.response?.data.message ??
-            "ログインに失敗しました。もう一度お試しください。",
-        );
-      } else {
-        setMessage("予期しないエラーが発生しました。");
-      }
+      const apiError = parseApiError(
+        error,
+        "ログインに失敗しました。もう一度お試しください。",
+      );
+
+      setErrors(apiError.errors);
+      setMessage(apiError.message);
     } finally {
       setIsSubmitting(false);
     }
