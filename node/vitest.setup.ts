@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/vitest";
+import { usePathname } from "next/navigation";
 import { vi } from "vitest";
 
 /**
@@ -8,6 +9,7 @@ vi.mock("next/navigation", async () => {
   const { pushMock, refreshMock } = await import("./tests/mocks");
 
   return {
+    usePathname: () => "/",
     useRouter: () => ({
       push: pushMock,
       refresh: refreshMock,
