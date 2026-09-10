@@ -18,7 +18,7 @@ class LogoutTest extends TestCase
         $this->withHeader('Origin', 'http://localhost:3000');
     }
 
-    #[Test] 
+    #[Test]
     public function ログイン中のユーザーがログアウトできる(): void
     {
         $user = User::factory()->create();

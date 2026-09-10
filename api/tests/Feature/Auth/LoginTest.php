@@ -19,7 +19,7 @@ class LoginTest extends TestCase
         $this->withHeader('Origin', 'http://localhost:3000');
     }
 
-    #[Test] 
+    #[Test]
     public function 正しい認証情報でログインできる(): void
     {
         $user = User::factory()->create([
@@ -37,7 +37,7 @@ class LoginTest extends TestCase
             ->assertJsonPath('message', 'ログインしました。')
             ->assertJsonPath('user.id', $user->id)
             ->assertJsonPath('user.email', $user->email);
-        
+
         $this->assertAuthenticatedAs($user);
     }
 
@@ -57,7 +57,7 @@ class LoginTest extends TestCase
         $response
             ->assertStatus(401)
             ->assertJsonPath('message', 'メールアドレスまたはパスワードが正しくありません。');
-        
+
         $this->assertGuest();
     }
 }
