@@ -33,9 +33,12 @@ export function Header() {
   }
 
   return (
-    <header className="border-b border-slate-800 bg-slate-950 text-slate-100">
+    <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/90 text-slate-100 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className=" flex items-center text-lg font-bold tracking-wide text-sky-400">
+        <Link
+          href="/"
+          className=" flex items-center text-lg font-bold tracking-wide text-sky-400"
+        >
           <Image
             src="/logo.svg"
             alt="Video Reviewのロゴ"
