@@ -92,10 +92,9 @@ export async function getPopularTvShows(): Promise<Work[]> {
   }));
 }
 
-
 type TmdbTrendingWork = {
   id: number;
-  media_type: "movie" | "tv";
+  media_type: "movie" | "tv" | "person";
   title?: string;
   name?: string;
   poster_path: string | null;
