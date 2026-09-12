@@ -85,7 +85,21 @@ Netflix、Prime Video、Hulu、U-NEXTなど、複数の動画配信サービス�
 
 ### 外部API
 
-- TMDB API（予定）
+- TMDB API
+
+#### 外部API障害時の扱い
+
+作品情報はTMDB APIから取得しています。
+
+TMDB APIへの通信に失敗した場合は、作品情報の取得に失敗したものとしてエラー処理を行います。
+固定のダミーデータへ自動的に切り替える処理は行いません。
+
+テストでは実際のTMDB APIへ通信せず、APIレスポンスをモックして以下を確認しています。
+
+- 人気映画を取得・変換できること
+- 人気TVシリーズを取得・変換できること
+- トレンド作品から映画・TVシリーズを取得し、人物データを除外できること
+- TMDB APIがエラーを返した場合に例外処理されること
 
 ## ディレクトリ構成
 
@@ -237,9 +251,8 @@ docker compose exec php php artisan test
 
 ```bash
 docker compose exec node npm run lint
+docker compose exec node npm test
 ```
-
-フロントエンドの自動テストは今後追加予定です。
 
 ## 要件定義書
 
