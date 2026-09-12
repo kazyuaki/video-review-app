@@ -1,5 +1,6 @@
 import SectionHeading from "@/components/home/SectionHeading";
-import WorkCard, { type Work } from "@/components/home/WorkCard";
+import WorkCard from "@/components/home/WorkCard";
+import type { Work } from "@/types/work";
 
 export type WorkSectionProps = {
   title: string;

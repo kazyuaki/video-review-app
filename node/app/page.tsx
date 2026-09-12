@@ -1,8 +1,13 @@
 import HeroSection from "@/components/home/HeroSection";
 import WorkSection from "@/components/home/WorkSection";
 import ReviewSection from "@/components/home/ReviewSection";
-import type { Work } from "@/components/home/WorkCard";
+import type { Work } from "@/types/work";
 import type { Review } from "@/components/home/ReviewCard";
+import {
+  getPopularMovies,
+  getPopularTvShows,
+  getTrendingWorks,
+} from "@/lib/tmdb";
 
 /**
  * 作品一覧表示用のダミーデータを生成する。
@@ -15,8 +20,6 @@ const createWorks = (prefix: string, count = 10, withRank = false): Work[] =>
     ...(withRank && { rank: index + 1 }),
   }));
 
-const popularWorks = createWorks("人気作品", 10, true);
-const trendingDramas = createWorks("話題のドラマ");
 const recommendedWorks = createWorks("おすすめ作品");
 
 const recentReviews: Review[] = [
@@ -40,28 +43,37 @@ const recentReviews: Review[] = [
   },
 ];
 
-const workSections = [
-  {
-    title: "人気作品",
-    subtitle: "POPULAR",
-    works: popularWorks,
-  },
-  {
-    title: "話題のドラマ",
-    subtitle: "TRENDING TV",
-    works: trendingDramas,
-  },
-  {
-    title: "おすすめ作品",
-    subtitle: "RECOMMENDED",
-    works: recommendedWorks,
-  },
-];
-
 /**
  * アプリケーションのトップページを表示する。
  */
-export default function Home() {
+export default async function Home() {
+  const popularMovies = await getPopularMovies();
+  const popularTvShows = await getPopularTvShows();
+  const trendingWorks = await getTrendingWorks();
+
+  const workSections = [
+    {
+      title: "映画ランキング",
+      subtitle: "MOVIE RANKING",
+      works: popularMovies,
+    },
+    {
+      title: "TVシリーズランキング",
+      subtitle: "TV SERIES RANKING",
+      works: popularTvShows,
+    },
+    {
+      title: "話題の作品",
+      subtitle: "TRENDING WORKS",
+      works: trendingWorks,
+    },
+    {
+      title: "おすすめ作品",
+      subtitle: "RECOMMENDED",
+      works: recommendedWorks,
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
       {/* Hero */}
