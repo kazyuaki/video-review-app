@@ -142,3 +142,51 @@ export async function getTrendingWorks(): Promise<Work[]> {
       posterPath: work.poster_path,
     }));
 }
+
+type TmdbSearchWork = {
+  id: number;
+  media_type: "movie" | "tv" | "person";
+  title?: string;
+  name?: string;
+  poster_path: string | null;
+};
+
+type TmdbSearchResponse = {
+  results: TmdbSearchWork[];
+};
+
+/**
+ * TMDBからキーワードに一致する作品を検索する。
+ * 映画とTVシリーズのみを対象とし、人物データは除外する。
+ */
+export async function searchWorks(keyword: string): Promise<Work[]> {
+  const token = process.env.TMDB_API_TOKEN;
+
+  if (!token) {
+    throw new Error("TMDB_API_TOKENが設定されていません。");
+  }
+
+  const response = await fetch(
+    `${TMDB_API_URL}/search/multi?query=${encodeURIComponent(keyword)}&language=ja-JP&page=1`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("作品検索に失敗しました。");
+  }
+
+  const data: TmdbSearchResponse = await response.json();
+
+  return data.results
+    .filter((work) => work.media_type === "movie" || work.media_type === "tv")
+    .map((work) => ({
+      id: work.id,
+      title: work.media_type === "movie" ? work.title ?? "" : work.name ?? "",
+      posterPath: work.poster_path,
+    }));
+}

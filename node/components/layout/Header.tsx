@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -49,7 +50,18 @@ export function Header() {
           <span>Video Review</span>{" "}
         </Link>
 
-        <nav aria-label="メインナビゲーション">
+        <nav
+          aria-label="メインナビゲーション"
+          className="flex items-center gap-3"
+        >
+          <Link
+            href="/works/search"
+            aria-label="作品を検索"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-lg text-slate-300 transition hover:bg-slate-800 hover:text-sky-400"
+          >
+            <Search size={20} />
+          </Link>
+
           {isLoading ? (
             <span className="text-sm text-slate-400">確認中...</span>
           ) : user ? (
