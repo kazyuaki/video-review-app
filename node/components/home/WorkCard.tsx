@@ -34,6 +34,10 @@ export default function WorkCard({ work }: { work: Work }) {
 
       <div className="p-4">
         <h3 className="truncate font-semibold text-white">{work.title}</h3>
+        <p>
+          {work.releaseYear && `${work.releaseYear}・`}
+          {work.mediaType === "movie" ? "映画" : "TVシリーズ"}
+        </p>
       </div>
     </article>
   );
