@@ -1,0 +1,48 @@
+import Link from "next/link";
+
+type WorkSearchFilterProps = {
+  query: string;
+  selectedType?: string;
+};
+
+const filters = [
+  { label: "すべて", value: "" },
+  { label: "映画", value: "movie" },
+  { label: "TVシリーズ", value: "tv" },
+  { label: "アニメーション", value: "animation" },
+];
+
+/**
+ * 作品検索結果の絞り込み条件を表示する。
+ * 映画、TVシリーズ、アニメーションで検索結果を切り替える。
+ */
+export default function WorkSearchFilter({
+  query,
+  selectedType = "",
+}: WorkSearchFilterProps) {
+  return (
+    <div className="mt-6 flex flex-wrap gap-3">
+      {filters.map((filter) => {
+        const isSelected = selectedType === filter.value;
+
+        const href = filter.value
+          ? `/works/search?query=${encodeURIComponent(query)}&type=${filter.value}`
+          : `/works/search?query=${encodeURIComponent(query)}`;
+
+        return (
+          <Link
+            key={filter.value}
+            href={href}
+            className={`rounded-lg border px-4 py-2 text-sm transition ${
+              isSelected
+                ? "border-indigo-400 bg-indigo-500 text-white"
+                : "border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white"
+            }`}
+          >
+            {filter.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}

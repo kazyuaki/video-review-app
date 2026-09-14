@@ -1,10 +1,14 @@
 import WorkCard from "@/components/home/WorkCard";
 import WorkSearchForm from "@/components/search/WorkSearchForm";
+import WorkSearchFilter from "@/components/search/WorkSearchFilter";
 import { searchWorks } from "@/lib/tmdb";
+import WorkSearchPagination from "@/components/search/WorkSearchPagination";
 
 type WorkSearchPageProps = {
   searchParams: Promise<{
     query?: string;
+    type?: string;
+    page?: string;
   }>;
 };
 
@@ -15,9 +19,20 @@ type WorkSearchPageProps = {
 export default async function WorkSearchPage({
   searchParams,
 }: WorkSearchPageProps) {
-  const { query = "" } = await searchParams;
+  const { query = "", type = "", page = "1" } = await searchParams;
 
-  const works = query ? await searchWorks(query) : [];
+  const currentPageNumber =
+    Number.isInteger(Number(page)) && Number(page) > 0 ? Number(page) : 1;
+
+  const searchResult = query
+    ? await searchWorks(query, type, currentPageNumber)
+    : {
+        works: [],
+        currentPage: 1,
+        totalPages: 1,
+    };
+
+  const { works, currentPage, totalPages } = searchResult;
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
@@ -40,11 +55,20 @@ export default async function WorkSearchPage({
           <section className="mt-12">
             <h2 className="text-2xl font-bold">「{query}」の検索結果</h2>
 
+            <WorkSearchFilter query={query} selectedType={type} />
+
             <div className="mt-6 grid grid-cols-[repeat(auto-fit,176px)] justify-center gap-4">
               {works.map((work) => (
                 <WorkCard key={work.id} work={work} />
               ))}
             </div>
+
+            <WorkSearchPagination
+              query={query}
+              selectedType={type}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
           </section>
         )}
       </div>
