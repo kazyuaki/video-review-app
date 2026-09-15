@@ -104,7 +104,7 @@ export async function getPopularTvShows(): Promise<Work[]> {
 
 type TmdbTrendingWork = {
   id: number;
-  media_type: "movie" | "tv" | "person";
+  media_type: "movie" | "tv";
   title?: string;
   name?: string;
   poster_path: string | null;
@@ -160,7 +160,27 @@ export async function getTrendingWorks(): Promise<Work[]> {
     }));
 }
 
-type TmdbSearchWork = {
+type TmdbMovieSearchWork = {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  release_date?: string;
+  genre_ids?: number[];
+};
+
+type TmdbTvSearchWork = {
+  id: number;
+  name: string;
+  poster_path: string | null;
+  first_air_date?: string;
+  genre_ids?: number[];
+};
+
+/**
+ * 複合検索APIから取得する作品情報を定義する。
+ * 映画、TVシリーズ、人物の検索結果を扱う。
+ */
+type TmdbMultiSearchWork = {
   id: number;
   media_type: "movie" | "tv" | "person";
   title?: string;
@@ -171,16 +191,34 @@ type TmdbSearchWork = {
   genre_ids?: number[];
 };
 
-type TmdbSearchResponse = {
+/**
+ * TMDB検索APIのページネーション付きレスポンスを定義する。
+ */
+type TmdbSearchResponse<T> = {
   page: number;
   total_pages: number;
-  results: TmdbSearchWork[];
+  results: T[];
 };
 
 type SearchWorksResult = {
   works: Work[];
   currentPage: number;
   totalPages: number;
+};
+
+/**
+ * 検索条件に応じたTMDBの検索エンドポイントを返す。
+ */
+const getSearchEndpoint = (type?: string) => {
+  if (type === "movie") {
+    return "search/movie";
+  }
+
+  if (type === "tv") {
+    return "search/tv";
+  }
+
+  return "search/multi";
 };
 
 /**
@@ -198,8 +236,10 @@ export async function searchWorks(
     throw new Error("TMDB_API_TOKENが設定されていません。");
   }
 
+  const endpoint = getSearchEndpoint(type);
+
   const response = await fetch(
-    `${TMDB_API_URL}/search/multi?query=${encodeURIComponent(keyword)}&language=ja-JP&page=${page}`,
+    `${TMDB_API_URL}/${endpoint}?query=${encodeURIComponent(keyword)}&language=ja-JP&page=${page}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -212,25 +252,49 @@ export async function searchWorks(
     throw new Error("作品検索に失敗しました。");
   }
 
-  const data: TmdbSearchResponse = await response.json();
+  if (type === "movie") {
+    const data: TmdbSearchResponse<TmdbMovieSearchWork> = await response.json();
 
-  const works = data.results
-    .filter((work) => work.media_type === "movie" || work.media_type === "tv")
-    .filter((work) => {
-      if (type === "movie") {
-        return work.media_type === "movie";
-      }
+    const works: Work[] = data.results.map((movie) => ({
+      id: movie.id,
+      title: movie.title,
+      mediaType: "movie",
+      releaseYear: movie.release_date?.slice(0, 4),
+      posterPath: movie.poster_path,
+    }));
 
-      if (type === "tv") {
-        return work.media_type === "tv";
-      }
+    return {
+      works,
+      currentPage: data.page,
+      totalPages: data.total_pages,
+    };
+  }
 
-      if (type === "animation") {
-        return work.genre_ids?.includes(16) ?? false;
-      }
+  if (type === "tv") {
+    const data: TmdbSearchResponse<TmdbTvSearchWork> = await response.json();
 
-      return true;
-    })
+    const works: Work[] = data.results.map((tvShow) => ({
+      id: tvShow.id,
+      title: tvShow.name,
+      mediaType: "tv",
+      releaseYear: tvShow.first_air_date?.slice(0, 4),
+      posterPath: tvShow.poster_path,
+    }));
+
+    return {
+      works,
+      currentPage: data.page,
+      totalPages: data.total_pages,
+    };
+  }
+
+  const data: TmdbSearchResponse<TmdbMultiSearchWork> = await response.json();
+
+  const works: Work[] = data.results
+    .filter(
+      (work): work is TmdbMultiSearchWork & { media_type: "movie" | "tv" } =>
+        work.media_type === "movie" || work.media_type === "tv",
+    )
     .map((work) => ({
       id: work.id,
       title:
