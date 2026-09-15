@@ -1,5 +1,7 @@
-export { getPopularMovies } from "./movies";
+export { getMoviesByGenre, getPopularMovies } from "./movies";
 export { searchWorks } from "./search";
 export type { SearchWorksResult } from "./search";
 export { getTrendingWorks } from "./trending";
-export { getPopularTvShows } from "./tv";
+export { getPopularTvShows, getTvShowsByGenre } from "./tv";
+export { getMovieGenres, getTvGenres } from "./genres";
+export { getWorksByGenre } from "./discover";
