@@ -9,12 +9,11 @@ const filters = [
   { label: "すべて", value: "" },
   { label: "映画", value: "movie" },
   { label: "TVシリーズ", value: "tv" },
-  { label: "アニメーション", value: "animation" },
 ];
 
 /**
  * 作品検索結果の絞り込み条件を表示する。
- * 映画、TVシリーズ、アニメーションで検索結果を切り替える。
+ * 映画、TVシリーズで検索結果を切り替える。
  */
 export default function WorkSearchFilter({
   query,
