@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 type WorkSearchPaginationProps = {
-  query: string;
+  query?: string;
+  selectedGenre?: string;
   selectedType?: string;
   currentPage: number;
   totalPages: number;
@@ -12,7 +13,8 @@ type WorkSearchPaginationProps = {
  * 現在の検索条件を保持したまま、前後のページへ移動する。
  */
 export default function WorkSearchPagination({
-  query,
+  query = "",
+  selectedGenre = "",
   selectedType = "",
   currentPage,
   totalPages,
@@ -22,9 +24,16 @@ export default function WorkSearchPagination({
    */
   const createPageHref = (page: number) => {
     const params = new URLSearchParams({
-      query,
       page: String(page),
     });
+
+    if (query) {
+      params.set("query", query);
+    }
+
+    if (selectedGenre) {
+      params.set("genre", selectedGenre);
+    }
 
     if (selectedType) {
       params.set("type", selectedType);

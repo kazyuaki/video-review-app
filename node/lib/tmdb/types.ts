@@ -71,3 +71,14 @@ export type TmdbSearchResponse<T> = {
   total_pages: number;
   results: T[];
 };
+
+/** TMDBのジャンル情報 */
+export type TmdbGenre = {
+  id: number;
+  name: string;
+};
+
+/** TMDBのジャンル一覧APIのレスポンス */
+export type TmdbGenreResponse = {
+  genres: TmdbGenre[];
+};

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 type WorkSearchFilterProps = {
   query: string;
+  selectedGenre?: string;
   selectedType?: string;
 };
 
@@ -17,6 +18,7 @@ const filters = [
  */
 export default function WorkSearchFilter({
   query,
+  selectedGenre = "",
   selectedType = "",
 }: WorkSearchFilterProps) {
   return (
@@ -24,14 +26,24 @@ export default function WorkSearchFilter({
       {filters.map((filter) => {
         const isSelected = selectedType === filter.value;
 
-        const href = filter.value
-          ? `/works/search?query=${encodeURIComponent(query)}&type=${filter.value}`
-          : `/works/search?query=${encodeURIComponent(query)}`;
+        const params = new URLSearchParams();
+
+        if (query) {
+          params.set("query", query);
+        }
+
+        if (selectedGenre) {
+          params.set("genre", selectedGenre);
+        }
+
+        if (filter.value) {
+          params.set("type", filter.value);
+        }
 
         return (
           <Link
             key={filter.value}
-            href={href}
+            href={`/works/search?${params.toString()}`}
             className={`rounded-lg border px-4 py-2 text-sm transition ${
               isSelected
                 ? "border-indigo-400 bg-indigo-500 text-white"
