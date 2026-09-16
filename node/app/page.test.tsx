@@ -62,6 +62,7 @@ describe("Home", () => {
     ]);
   });
 
+  // NF008: 人気映画を表示できる
   it("人気映画を表示できる", async () => {
     render(await Home());
 
@@ -78,6 +79,7 @@ describe("Home", () => {
     expect(within(section!).getByText("1")).toBeInTheDocument();
   });
 
+  // NF009: 人気TVシリーズを表示できる
   it("人気TVシリーズを表示できる", async () => {
     render(await Home());
 
@@ -94,6 +96,7 @@ describe("Home", () => {
     expect(within(section!).getByText("1")).toBeInTheDocument();
   });
 
+  // NF010: 話題の映画・TV作品を表示できる
   it("話題の映画・TVシリーズを表示できる", async () => {
     render(await Home());
 

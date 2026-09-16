@@ -114,12 +114,17 @@ export default async function WorkSearchPage({
               selectedGenre={genre}
               selectedType={type}
             />
-
-            <div className="mt-6 grid grid-cols-[repeat(auto-fit,176px)] justify-center gap-4">
-              {works.map((work) => (
-                <WorkCard key={`${work.mediaType}-${work.id}`} work={work} />
-              ))}
-            </div>
+            {works.length > 0 ? (
+              <div className="mt-6 grid grid-cols-[repeat(auto-fit,176px)] justify-center gap-4">
+                {works.map((work) => (
+                  <WorkCard key={`${work.mediaType}-${work.id}`} work={work} />
+                ))}
+              </div>
+            ) : (
+              <p className="mt-6 text-center text-slate-400">
+                該当する作品が見つかりませんでした。
+              </p>
+            )}
 
             <WorkSearchPagination
               query={query}
