@@ -6,6 +6,7 @@ import ErrorPage from "@/app/error";
  * エラー内容の表示と再試行操作を確認する。
  */
 describe("Error", () => {
+  // NF014: API通信の失敗時にエラー内容を表示できる
   it("作品情報の取得に失敗したことを表示できる", () => {
     render(<ErrorPage error={new Error("テスト用エラー")} reset={vi.fn()} />);
 
@@ -22,6 +23,7 @@ describe("Error", () => {
     ).toBeInTheDocument();
   });
 
+  // NF014: API通信の失敗時に再試行できる
   it("再試行ボタンを押すとresetが呼ばれる", () => {
     const resetMock = vi.fn();
 
