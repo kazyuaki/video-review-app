@@ -17,6 +17,7 @@ const createWorks = (prefix: string, count = 10, withRank = false): Work[] =>
   Array.from({ length: count }, (_, index) => ({
     id: index + 1,
     title: `${prefix} ${index + 1}`,
+    mediaType: "movie",
     ...(withRank && { rank: index + 1 }),
   }));
 
