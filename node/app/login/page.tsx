@@ -11,11 +11,11 @@ export default function LoginPage() {
       title="ログイン"
       description="お気に入りの作品を記録しましょう"
       footer={
-        <p>
-          アカウントをお持ちでないですか？
+        <p className="flex flex-wrap items-center justify-center gap-x-1 leading-6">
+          <span>アカウントをお持ちでないですか？</span>
           <Link
             href="/register"
-            className="ml-1 font-semibold text-indigo-600 transition hover:text-indigo-500"
+            className="whitespace-nowrap font-semibold text-indigo-600 transition hover:text-indigo-500"
           >
             会員登録
           </Link>

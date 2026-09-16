@@ -7,16 +7,26 @@ const TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
  * 作品情報をカード形式で表示する。
  * 作品のポスター、タイトル、ランキング対象の場合は順位を表示する。
  */
-export default function WorkCard({ work }: { work: Work }) {
+export default function WorkCard({
+  work,
+  fullWidth = false,
+}: {
+  work: Work;
+  fullWidth?: boolean;
+}) {
   return (
-    <article className="group relative w-44 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition hover:-translate-y-1 hover:bg-white/10">
+    <article
+      className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition hover:-translate-y-1 hover:bg-white/10 ${
+        fullWidth ? "w-full" : "w-44 shrink-0"
+      }`}
+    >
       <div className="relative flex aspect-[2/3] items-center justify-center bg-gradient-to-br from-indigo-500/30 to-purple-500/20">
         {work.posterPath ? (
           <Image
             src={`${TMDB_IMAGE_URL}${work.posterPath}`}
             alt={`${work.title}のポスター`}
             fill
-            sizes="176px"
+            sizes={fullWidth ? "(max-width: 639px) 50vw, 176px" : "176px"}
             className="object-cover"
           />
         ) : (

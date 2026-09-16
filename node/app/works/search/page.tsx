@@ -115,9 +115,13 @@ export default async function WorkSearchPage({
               selectedType={type}
             />
             {works.length > 0 ? (
-              <div className="mt-6 grid grid-cols-[repeat(auto-fit,176px)] justify-center gap-4">
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fit,176px)] sm:justify-center sm:gap-4">
                 {works.map((work) => (
-                  <WorkCard key={`${work.mediaType}-${work.id}`} work={work} />
+                  <WorkCard
+                    key={`${work.mediaType}-${work.id}`}
+                    work={work}
+                    fullWidth
+                  />
                 ))}
               </div>
             ) : (
