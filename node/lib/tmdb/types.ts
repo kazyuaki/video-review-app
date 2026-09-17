@@ -82,3 +82,43 @@ export type TmdbGenre = {
 export type TmdbGenreResponse = {
   genres: TmdbGenre[];
 };
+
+/** TMDBの作品詳細APIが返す作品情報。 */
+export type TmdbWorkDetail = {
+  id: number;
+  title?: string;
+  name?: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  release_date?: string;
+  first_air_date?: string;
+  genres: TmdbGenre[];
+};
+
+/** TMDBの作品詳細APIに含まれる出演者情報。 */
+export type TmdbCredits = {
+  cast: {
+    id: number;
+    name: string;
+    character: string;
+    profile_path: string | null;
+  }[];
+};
+
+/** TMDBの配信サービス情報。 */
+export type TmdbWatchProvider = {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string | null;
+};
+
+/** TMDBの配信サービスAPIが返す国別情報。 */
+export type TmdbWatchProviderResponse = {
+  results: {
+    JP?: {
+      link: string;
+      flatrate?: TmdbWatchProvider[];
+    };
+  };
+};
