@@ -12,7 +12,7 @@ class ReviewLike extends Model
 
     protected $fillable = [
         'user_id',
-        'review_id',
+        'review_id', // いいね対象となる reviews テーブルの内部ID
     ];
 
     /**

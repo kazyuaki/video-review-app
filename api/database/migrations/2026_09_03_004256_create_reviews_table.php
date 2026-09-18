@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('work_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('work_id')->constrained()->cascadeOnDelete(); // works テーブルの内部ID
             $table->unsignedTinyInteger('rating');
             $table->text('content');
-            $table->boolean('has_spoiler')->default(false);
+            $table->boolean('has_spoiler')->default(false); // ネタバレを含むレビューかどうか
             $table->timestamps();
 
+            // 1ユーザーにつき、1作品のレビューは1件にする。
             $table->unique(['user_id', 'work_id']);
             $table->index('created_at');
         });

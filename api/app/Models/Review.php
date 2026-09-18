@@ -13,10 +13,10 @@ class Review extends Model
 
     protected $fillable = [
         'user_id',
-        'work_id',
+        'work_id', // TMDB IDではなく、works テーブルの内部ID
         'rating',
         'content',
-        'has_spoiler',
+        'has_spoiler', // ネタバレを含むレビューかどうか
     ];
 
     protected function casts(): array
