@@ -11,11 +11,11 @@ class Work extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tmdb_id',
-        'media_type',
+        'tmdb_id', // TMDB上の作品ID。media_typeと組み合わせて作品を識別する
+        'media_type', // movie または tv
         'title',
         'overview',
-        'poster_path',
+        'poster_path', // TMDB画像の相対パス。画像URLそのものは保存しない
         'release_date',
     ];
 

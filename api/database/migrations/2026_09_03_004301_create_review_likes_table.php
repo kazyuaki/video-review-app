@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('review_likes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('review_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('review_id')->constrained()->cascadeOnDelete(); // reviews テーブルの内部ID
             $table->timestamps();
 
+            // 同じユーザーが同じレビューへ重複していいねできないようにする。
             $table->unique(['user_id', 'review_id']);
         });
     }
