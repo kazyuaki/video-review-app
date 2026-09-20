@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Review\IndexWorkReviewsController;
+use App\Http\Controllers\Review\ShowOwnWorkReviewController;
 use App\Http\Controllers\Review\StoreWorkReviewController;
 use App\Http\Controllers\Review\UpdateOwnWorkReviewController;
 use App\Http\Controllers\Work\SearchWorkController;
@@ -36,6 +37,12 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    // 自身のレビューを取得
+    Route::get(
+        '/works/{mediaType}/{tmdbId}/reviews/me',
+        ShowOwnWorkReviewController::class,
+    )->whereIn('mediaType', ['movie', 'tv'])
+        ->whereNumber('tmdbId');
     // レビュー投稿
     Route::post('/works/{mediaType}/{tmdbId}/reviews', StoreWorkReviewController::class)
         ->whereIn('mediaType', ['movie', 'tv'])
