@@ -3,6 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWorkDetail } from "@/lib/tmdb";
 import type { WorkMediaType } from "@/types/work";
+import { WorkReviewArea } from "@/components/review/WorkReviewArea";
+import { getWorkReviews } from "@/lib/reviews";
+
 
 type WorkDetailPageProps = {
   params: Promise<{
@@ -30,7 +33,12 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
     notFound();
   }
 
-  const work = await getWorkDetail(workId, mediaType as WorkMediaType);
+  const workMediaType = mediaType as WorkMediaType;
+
+  const [work, reviewData] = await Promise.all([
+    getWorkDetail(workId, workMediaType),
+    getWorkReviews(workMediaType, workId),
+  ]);
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
@@ -220,6 +228,13 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
             </p>
           )}
         </section>
+
+        <WorkReviewArea
+          mediaType={work.mediaType}
+          tmdbId={work.id}
+          title={work.title}
+          reviewData={reviewData}
+        />
       </div>
     </main>
   );
