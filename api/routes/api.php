@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Review\DeleteOwnWorkReviewController;
 use App\Http\Controllers\Review\IndexWorkReviewsController;
 use App\Http\Controllers\Review\ShowOwnWorkReviewController;
 use App\Http\Controllers\Review\StoreWorkReviewController;
@@ -52,6 +53,13 @@ Route::middleware('auth:sanctum')->group(function () {
         '/works/{mediaType}/{tmdbId}/reviews/me',
         UpdateOwnWorkReviewController::class,
     )->whereIn('mediaType', ['movie', 'tv'])
+        ->whereNumber('tmdbId');
+    // 自分のレビューを削除
+    Route::delete(
+        '/works/{mediaType}/{tmdbId}/reviews/me',
+        DeleteOwnWorkReviewController::class,
+    )
+        ->whereIn('mediaType', ['movie', 'tv'])
         ->whereNumber('tmdbId');
 });
 

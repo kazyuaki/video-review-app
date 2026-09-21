@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { api } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { parseApiError } from "@/lib/apiError";
 import type { OwnWorkReview, WorkReviewsResponse } from "@/types/review";
 import type { WorkMediaType } from "@/types/work";
 import { WorkReviewForm } from "./WorkReviewForm";
@@ -27,11 +29,15 @@ export function WorkReviewArea({
   reviewData,
 }: WorkReviewAreaProps) {
   const { user, isLoading } = useAuth();
+  const router = useRouter();
 
   const [ownReview, setOwnReview] = useState<OwnWorkReview | null>(null);
   const [isOwnReviewReady, setIsOwnReviewReady] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     if (isLoading || !user) {
@@ -87,12 +93,43 @@ export function WorkReviewArea({
     );
   }
 
+  async function handleDelete() {
+    setDeleteError("");
+    setIsDeleting(true);
+
+    try {
+      await api.get("/sanctum/csrf-cookie");
+
+      await api.delete(`/api/works/${mediaType}/${tmdbId}/reviews/me`);
+
+      setOwnReview(null);
+      setIsFormOpen(false);
+      setIsDeleteDialogOpen(false);
+      setMessage("レビューを削除しました。");
+      router.refresh();
+    } catch (error) {
+      const apiError = parseApiError(
+        error,
+        "レビューの削除に失敗しました。もう一度お試しください。",
+      );
+
+      setDeleteError(apiError.message);
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
   return (
     <section className="border-t border-white/10 py-10">
       <WorkReviewSection
         reviewData={reviewData}
         ownReviewId={user ? ownReview?.id : undefined}
         onEdit={() => setIsFormOpen(true)}
+        onDelete={() => {
+          setDeleteError("");
+          setIsDeleteDialogOpen(true);
+        }}
+        isDeleting={isDeleting}
       />
 
       {message && (
@@ -138,6 +175,56 @@ export function WorkReviewArea({
           onCancel={() => setIsFormOpen(false)}
         />
       ) : null}
+      {isDeleteDialogOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-review-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 px-4 backdrop-blur-sm"
+        >
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 p-6 shadow-2xl">
+            <h3
+              id="delete-review-title"
+              className="text-xl font-bold text-white"
+            >
+              レビューを削除しますか？
+            </h3>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              削除したレビューは元に戻せません。
+            </p>
+
+            {deleteError && (
+              <p
+                role="alert"
+                className="mt-4 rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-200"
+              >
+                {deleteError}
+              </p>
+            )}
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setIsDeleteDialogOpen(false)}
+                disabled={isDeleting}
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                キャンセル
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isDeleting ? "削除中..." : "削除する"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
