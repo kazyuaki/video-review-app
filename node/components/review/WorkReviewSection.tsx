@@ -6,6 +6,8 @@ type WorkReviewSectionProps = {
   reviewData: WorkReviewsResponse;
   ownReviewId?: number;
   onEdit: () => void;
+  onDelete: () => void;
+  isDeleting: boolean;
 };
 
 /**
@@ -15,6 +17,8 @@ export function WorkReviewSection({
   reviewData,
   ownReviewId,
   onEdit,
+  onDelete,
+  isDeleting,
 }: WorkReviewSectionProps) {
   return (
     <>
@@ -63,13 +67,23 @@ export function WorkReviewSection({
                     </p>
 
                     {isOwnReview && (
-                      <button
-                        type="button"
-                        onClick={onEdit}
-                        className="rounded-lg border border-indigo-400/60 px-3 py-1 text-xs font-semibold text-indigo-300 transition hover:bg-indigo-400 hover:text-slate-950"
-                      >
-                        編集
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={onEdit}
+                          className="rounded-lg border border-indigo-400/60 px-3 py-1 text-xs font-semibold text-indigo-300 transition hover:bg-indigo-400 hover:text-slate-950"
+                        >
+                          編集
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onDelete}
+                          disabled={isDeleting}
+                          className="rounded-lg border border-red-400/60 px-3 py-1 text-xs font-semibold text-red-300 transition hover:bg-red-400 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          削除
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
