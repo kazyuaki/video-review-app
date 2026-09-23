@@ -117,7 +117,6 @@ export type TmdbWatchProvider = {
 export type TmdbWatchProviderResponse = {
   results: {
     JP?: {
-      link: string;
       flatrate?: TmdbWatchProvider[];
     };
   };

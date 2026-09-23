@@ -29,18 +29,45 @@ export function WorkReviewForm({
 }: WorkReviewFormProps) {
   const router = useRouter();
 
-  const [rating, setRating] = useState(() => String(ownReview?.rating ?? 5));
+  const [rating, setRating] = useState(() => String(ownReview?.rating ?? ""));
   const [content, setContent] = useState(() => ownReview?.content ?? "");
   const [hasSpoiler, setHasSpoiler] = useState(
     () => ownReview?.hasSpoiler ?? false,
   );
   const [message, setMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{
+    rating?: string;
+    content?: string;
+  }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setMessage("");
+    const nextFieldErrors: {
+      rating?: string;
+      content?: string;
+    } = {};
+
+    if (!rating) {
+      nextFieldErrors.rating = "評価を選択してください。";
+    }
+
+    if (!content.trim()) {
+      nextFieldErrors.content = "レビュー本文を入力してください。";
+    } else if (content.length > 2000) {
+      nextFieldErrors.content =
+        "レビュー本文は2,000文字以内で入力してください。";
+    }
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors);
+      return;
+    }
+
+    setFieldErrors({});
+
     setIsSubmitting(true);
 
     const isEditing = Boolean(ownReview);
@@ -117,15 +144,31 @@ export function WorkReviewForm({
           <select
             id="rating"
             value={rating}
-            onChange={(event) => setRating(event.target.value)}
+            onChange={(event) => {
+              setRating(event.target.value);
+              setFieldErrors((current) => ({
+                ...current,
+                rating: undefined,
+              }));
+            }}
+            aria-invalid={Boolean(fieldErrors.rating)}
+            aria-describedby={fieldErrors.rating ? "rating-error" : undefined}
             className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white"
           >
+            <option value="" disabled>
+              評価を選択してください
+            </option>
             <option value="5">★★★★★ 5</option>
             <option value="4">★★★★☆ 4</option>
             <option value="3">★★★☆☆ 3</option>
             <option value="2">★★☆☆☆ 2</option>
             <option value="1">★☆☆☆☆ 1</option>
           </select>
+          {fieldErrors.rating && (
+            <p id="rating-error" className="mt-2 text-sm text-red-300">
+              {fieldErrors.rating}
+            </p>
+          )}
         </div>
 
         <div>
@@ -139,16 +182,27 @@ export function WorkReviewForm({
           <textarea
             id="content"
             value={content}
-            onChange={(event) => setContent(event.target.value)}
-            maxLength={2000}
-            required
+            onChange={(event) => {
+              setContent(event.target.value);
+              setFieldErrors((current) => ({
+                ...current,
+                content: undefined,
+              }));
+            }}
+            aria-invalid={Boolean(fieldErrors.content)}
+            aria-describedby={fieldErrors.content ? "content-error" : undefined}
             rows={6}
             placeholder="作品を観た感想を書いてみましょう。"
             className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white placeholder:text-slate-500"
           />
 
-          <p className="mt-1 text-right text-xs text-slate-500">
-            {content.length} / 2000文字
+          <p
+            id={fieldErrors.content ? "content-error" : undefined}
+            className={`mt-1 text-right text-xs ${
+              fieldErrors.content ? "text-red-300" : "text-slate-500"
+            }`}
+          >
+            {fieldErrors.content ?? `${content.length} / 2000文字`}
           </p>
         </div>
 
