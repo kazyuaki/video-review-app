@@ -26,7 +26,6 @@ export type WorkDetail = {
     profilePath: string | null;
   }[];
   streamingServices: TmdbWatchProvider[];
-  watchProviderUrl?: string;
   isRecentRelease: boolean;
 };
 
@@ -78,7 +77,6 @@ export async function getWorkDetail(
       profilePath: member.profile_path,
     })),
     streamingServices: japanProviders?.flatrate ?? [],
-    watchProviderUrl: japanProviders?.link,
     isRecentRelease:
       mediaType === "movie" && isRecentRelease(detail.release_date),
   };
