@@ -20,12 +20,16 @@ vi.mock("next/navigation", async () => {
  * Laravel APIへの通信をテスト用のモックに置き換える。
  */
 vi.mock("@/lib/api", async () => {
-  const { apiGetMock, apiPostMock } = await import("./tests/mocks");
+  const { apiDeleteMock, apiGetMock, apiPostMock, apiPutMock } = await import(
+    "./tests/mocks"
+  );
 
   return {
     api: {
       get: apiGetMock,
       post: apiPostMock,
+      put: apiPutMock,
+      delete: apiDeleteMock,
     },
   };
 });
