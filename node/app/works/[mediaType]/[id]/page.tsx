@@ -6,7 +6,7 @@ import { getWorkReviews } from "@/lib/reviews";
 import { WorkDetailHero } from "@/components/work-detail/WorkDetailHero";
 import { WorkCastSection } from "@/components/work-detail/WorkCastSection";
 import { WorkStreamingSection } from "@/components/work-detail/WorkStreamingSection";
-
+import { TmdbApiError } from "@/lib/tmdb/client";
 
 type WorkDetailPageProps = {
   params: Promise<{
@@ -33,10 +33,31 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 
   const workMediaType = mediaType as WorkMediaType;
 
-  const [work, reviewData] = await Promise.all([
+  // 作品詳細とレビューを並列で取得する。
+  const [workResult, reviewResult] = await Promise.allSettled([
     getWorkDetail(workId, workMediaType),
     getWorkReviews(workMediaType, workId),
   ]);
+
+  // TMDB APIが404を返した場合のみ、作品が存在しない画面を表示する。
+  if (workResult.status === "rejected") {
+    if (
+      workResult.reason instanceof TmdbApiError &&
+      workResult.reason.status === 404
+    ) {
+      notFound();
+    }
+
+    throw workResult.reason;
+  }
+
+  // レビューAPIの取得失敗は既存のエラー画面に委ねる。
+  if (reviewResult.status === "rejected") {
+    throw reviewResult.reason;
+  }
+
+  const work = workResult.value;
+  const reviewData = reviewResult.value;
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
