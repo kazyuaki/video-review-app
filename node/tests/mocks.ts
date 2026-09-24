@@ -11,3 +11,5 @@ export const refreshMock = vi.fn();
  */
 export const apiGetMock = vi.fn();
 export const apiPostMock = vi.fn();
+export const apiPutMock = vi.fn();
+export const apiDeleteMock = vi.fn();
