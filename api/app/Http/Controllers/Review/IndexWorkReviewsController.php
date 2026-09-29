@@ -24,6 +24,8 @@ class IndexWorkReviewsController extends Controller
                 'averageRating' => 0,
                 'reviewCount' => 0,
                 'reviews' => [],
+                'currentPage' => 1,
+                'totalPages' => 1,
             ]);
         }
 
@@ -32,25 +34,30 @@ class IndexWorkReviewsController extends Controller
             ->selectRaw('AVG(rating) as average_rating, COUNT(*) as review_count')
             ->first();
 
-        $reviews = Review::query()
+        // 新着順で、1ページあたり10件のレビューを取得する。
+        $reviewPaginator = Review::query()
             ->where('work_id', $work->id)
             ->with('user:id,name')
             ->latest()
-            ->take(10)
-            ->get()
-            ->map(fn (Review $review) => [
+            ->paginate(10);
+
+        $reviews = $reviewPaginator->getCollection()->map(
+            fn (Review $review) => [
                 'id' => $review->id,
                 'userName' => $review->user->name,
                 'rating' => $review->rating,
                 'content' => $review->content,
                 'hasSpoiler' => $review->has_spoiler,
                 'createdAt' => $review->created_at->toISOString(),
-            ]);
+            ],
+        );
 
         return response()->json([
             'averageRating' => round((float) $summary->average_rating, 1),
             'reviewCount' => $summary->review_count,
             'reviews' => $reviews,
+            'currentPage' => $reviewPaginator->currentPage(),
+            'totalPages' => $reviewPaginator->lastPage(),
         ]);
     }
 }

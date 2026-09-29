@@ -352,9 +352,66 @@ class WorkReviewApiTest extends TestCase
             ->assertJsonPath('reviews.0.content', '後に投稿されたレビューです。')
             ->assertJsonPath('reviews.1.id', $olderReview->id)
             ->assertJsonPath('reviews.1.userName', 'ユーザーA')
+            ->assertJsonPath('currentPage', 1)
+            ->assertJsonPath('totalPages', 1)
             ->assertJsonMissing([
                 'content' => '別作品のレビューです。',
             ]);
+    }
+
+    #[Test]
+    public function 作品レビューをページ単位で取得できる(): void
+    {
+        $work = Work::query()->create([
+            'tmdb_id' => 12345,
+            'media_type' => 'movie',
+            'title' => '対象作品',
+        ]);
+
+        $reviews = [];
+
+        for ($index = 1; $index <= 11; $index++) {
+            $user = User::factory()->create();
+
+            $review = Review::query()->create([
+                'user_id' => $user->id,
+                'work_id' => $work->id,
+                'rating' => 4,
+                'content' => "{$index}件目のレビューです。",
+                'has_spoiler' => false,
+            ]);
+
+            // 新着順をテストできるよう、投稿日時を明示的に設定する。
+            $review->forceFill([
+                'created_at' => now()->subMinutes(12 - $index),
+            ])->save();
+
+            $reviews[] = $review;
+        }
+
+        $firstPageResponse = $this->getJson(
+            '/api/works/movie/12345/reviews?page=1',
+        );
+
+        $firstPageResponse
+            ->assertOk()
+            ->assertJsonPath('reviewCount', 11)
+            ->assertJsonPath('currentPage', 1)
+            ->assertJsonPath('totalPages', 2)
+            ->assertJsonCount(10, 'reviews')
+            ->assertJsonPath('reviews.0.id', $reviews[10]->id)
+            ->assertJsonPath('reviews.9.id', $reviews[1]->id);
+
+        $secondPageResponse = $this->getJson(
+            '/api/works/movie/12345/reviews?page=2',
+        );
+
+        $secondPageResponse
+            ->assertOk()
+            ->assertJsonPath('currentPage', 2)
+            ->assertJsonPath('totalPages', 2)
+            ->assertJsonCount(1, 'reviews')
+            ->assertJsonPath('reviews.0.id', $reviews[0]->id);
     }
 
     #[Test]

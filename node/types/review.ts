@@ -17,6 +17,8 @@ export type WorkReviewsResponse = {
   averageRating: number;
   reviewCount: number;
   reviews: WorkReview[];
+  currentPage: number;
+  totalPages: number;
 };
 
 /**

@@ -1,10 +1,12 @@
 "use client";
 
 import type { WorkReviewsResponse } from "@/types/review";
+import Link from "next/link";
 
 type WorkReviewSectionProps = {
   reviewData: WorkReviewsResponse;
   ownReviewId?: number;
+  reviewListHref: string;
   onEdit: () => void;
   onDelete: () => void;
   isDeleting: boolean;
@@ -16,6 +18,7 @@ type WorkReviewSectionProps = {
 export function WorkReviewSection({
   reviewData,
   ownReviewId,
+  reviewListHref,
   onEdit,
   onDelete,
   isDeleting,
@@ -118,6 +121,17 @@ export function WorkReviewSection({
         <p className="mt-6 rounded-2xl bg-white/5 px-5 py-8 text-center text-slate-400">
           まだレビューはありません。最初のレビューを投稿してみましょう。
         </p>
+      )}
+
+      {reviewData.totalPages > 1 && (
+        <div className="mt-6 text-center">
+          <Link
+            href={reviewListHref}
+            className="inline-flex rounded-lg border border-indigo-400/60 px-4 py-2 text-sm font-semibold text-indigo-300 transition hover:bg-indigo-400 hover:text-slate-950"
+          >
+            すべてのレビューを見る
+          </Link>
+        </div>
       )}
     </>
   );
