@@ -124,6 +124,7 @@ export function WorkReviewArea({
       <WorkReviewSection
         reviewData={reviewData}
         ownReviewId={user ? ownReview?.id : undefined}
+        reviewListHref={`/works/${mediaType}/${tmdbId}/reviews`}
         onEdit={() => setIsFormOpen(true)}
         onDelete={() => {
           setDeleteError("");
