@@ -8,6 +8,7 @@ import {
   getPopularTvShows,
   getTrendingWorks,
 } from "@/lib/tmdb";
+import { getRecentReviews } from "@/lib/reviews";
 
 /**
  * 作品一覧表示用のダミーデータを生成する。
@@ -23,34 +24,24 @@ const createWorks = (prefix: string, count = 10, withRank = false): Work[] =>
 
 const recommendedWorks = createWorks("おすすめ作品");
 
-const recentReviews: Review[] = [
-  {
-    id: 1,
-    user: "User A",
-    title: "最後まで一気に観てしまいました",
-    rating: 5,
-  },
-  {
-    id: 2,
-    user: "User B",
-    title: "映像と音楽がすごく良かったです",
-    rating: 4,
-  },
-  {
-    id: 3,
-    user: "User C",
-    title: "また観返したくなる作品でした",
-    rating: 5,
-  },
-];
-
 /**
  * アプリケーションのトップページを表示する。
  */
 export default async function Home() {
-  const popularMovies = await getPopularMovies();
-  const popularTvShows = await getPopularTvShows();
-  const trendingWorks = await getTrendingWorks();
+  const [popularMovies, popularTvShows, trendingWorks, recentReviewData] =
+    await Promise.all([
+      getPopularMovies(),
+      getPopularTvShows(),
+      getTrendingWorks(),
+      getRecentReviews(),
+    ]);
+
+  const recentReviews: Review[] = recentReviewData.reviews.map((review) => ({
+    id: review.id,
+    user: review.userName,
+    title: review.content,
+    rating: review.rating,
+  }));
 
   const workSections = [
     {
