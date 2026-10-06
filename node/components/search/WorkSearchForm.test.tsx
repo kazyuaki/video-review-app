@@ -14,7 +14,7 @@ describe("WorkSearchForm", () => {
     vi.clearAllMocks();
   });
 
-  // NF011: 検索キーワードを入力して作品を検索できる
+  // NF016: 検索キーワードを入力して作品を検索できる
   it("入力したキーワードを検索URLに設定して遷移できる", async () => {
     const user = userEvent.setup();
 

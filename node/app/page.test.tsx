@@ -160,7 +160,7 @@ describe("Home", () => {
     ).toHaveAttribute("href", "/works/trending");
   });
 
-  // NF036: 新着レビューを表示できる
+  // NF045: 新着レビューを表示できる
   it("新着レビューの本文、投稿者、評価を表示できる", async () => {
     render(await Home());
 

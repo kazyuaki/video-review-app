@@ -24,7 +24,7 @@ describe("WorkReviewForm", () => {
     onCompleteMock.mockResolvedValue(undefined);
   });
 
-  // NF024: 評価と本文を投稿できる
+  // NF029: 評価と本文を投稿できる
   it("評価と本文を入力してレビューを投稿できる", async () => {
     render(
       <WorkReviewForm
@@ -64,7 +64,7 @@ describe("WorkReviewForm", () => {
     expect(refreshMock).toHaveBeenCalledOnce();
   });
 
-  // NF025: 評価未選択時にエラーを表示できる
+  // NF030: 評価未選択時にエラーを表示できる
   it("評価を選択せずに投稿するとエラーを表示し、APIを呼び出さない", () => {
     render(
       <WorkReviewForm
@@ -89,7 +89,7 @@ describe("WorkReviewForm", () => {
     expect(onCompleteMock).not.toHaveBeenCalled();
   });
 
-  // NF026: 本文未入力時にエラーを表示できる
+  // NF031: 本文未入力時にエラーを表示できる
   it("本文を入力せずに投稿するとエラーを表示し、APIを呼び出さない", () => {
     render(
       <WorkReviewForm
@@ -116,7 +116,7 @@ describe("WorkReviewForm", () => {
     expect(onCompleteMock).not.toHaveBeenCalled();
   });
 
-  // NF027: 文字数超過時にエラーを表示できる
+  // NF032: 文字数超過時にエラーを表示できる
   it("2000文字を超える本文ではエラーを表示し、APIを呼び出さない", () => {
     render(
       <WorkReviewForm
@@ -147,7 +147,7 @@ describe("WorkReviewForm", () => {
     expect(onCompleteMock).not.toHaveBeenCalled();
   });
 
-  // NF028: 既存レビューを編集できる
+  // NF033: 既存レビューを編集できる
   it("既存レビューの評価と本文を変更して更新できる", async () => {
     render(
       <WorkReviewForm
