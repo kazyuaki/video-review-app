@@ -1,3 +1,5 @@
+import type { WorkMediaType } from "./work";
+
 /**
  * 作品詳細画面に表示するレビュー情報。
  */
@@ -31,4 +33,25 @@ export type OwnWorkReview = {
   hasSpoiler: boolean;
   createdAt: string;
   updatedAt: string;
+};
+
+/**
+ * ホーム画面に表示する新着レビュー情報。
+ */
+export type RecentReview = {
+  id: number;
+  userName: string;
+  workTitle: string;
+  tmdbId: number;
+  mediaType: WorkMediaType;
+  rating: number;
+  content: string;
+  createdAt: string;
+};
+
+/**
+ * ホーム画面用の新着レビュー一覧APIが返す情報。
+ */
+export type RecentReviewsResponse = {
+  reviews: RecentReview[];
 };

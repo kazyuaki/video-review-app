@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Review\DeleteOwnWorkReviewController;
+use App\Http\Controllers\Review\IndexRecentReviewsController;
 use App\Http\Controllers\Review\IndexWorkReviewsController;
 use App\Http\Controllers\Review\ShowOwnWorkReviewController;
 use App\Http\Controllers\Review\StoreWorkReviewController;
@@ -68,6 +69,9 @@ Route::middleware('auth:sanctum')->group(function () {
 | 作品（未ログインでも利用可能）
 |--------------------------------------------------------------------------
 */
+// 全作品の新着レビューを取得
+Route::get('/reviews/recent', IndexRecentReviewsController::class);
+
 // 作品検索
 Route::get('/works/search', SearchWorkController::class);
 // 作品ごとのレビュー一覧・評価集計を取得

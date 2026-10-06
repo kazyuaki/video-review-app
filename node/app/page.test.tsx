@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
+import { getRecentReviews } from "@/lib/reviews";
 
 import Home from "./page";
 import {
@@ -12,6 +13,10 @@ vi.mock("@/lib/tmdb", () => ({
   getPopularMovies: vi.fn(),
   getPopularTvShows: vi.fn(),
   getTrendingWorks: vi.fn(),
+}));
+
+vi.mock("@/lib/reviews", () => ({
+  getRecentReviews: vi.fn(),
 }));
 
 /**
@@ -60,6 +65,20 @@ describe("Home", () => {
         posterPath: "/trending-tv.jpg",
       },
     ]);
+    vi.mocked(getRecentReviews).mockResolvedValue({
+      reviews: [
+        {
+          id: 401,
+          userName: "新着レビュー投稿者",
+          workTitle: "テスト映画",
+          tmdbId: 101,
+          mediaType: "movie",
+          rating: 4,
+          content: "新着レビューの本文です。",
+          createdAt: "2026-10-06T00:00:00.000Z",
+        },
+      ],
+    });
   });
 
   // NF008: 人気映画を表示できる
@@ -108,5 +127,24 @@ describe("Home", () => {
     expect(section).not.toBeNull();
     expect(within(section!).getByText("話題の映画")).toBeInTheDocument();
     expect(within(section!).getByText("話題のTVシリーズ")).toBeInTheDocument();
+  });
+
+  // NF036: 新着レビューを表示できる
+  it("新着レビューの本文、投稿者、評価を表示できる", async () => {
+    render(await Home());
+
+    const section = screen
+      .getByRole("heading", { name: "新着レビュー" })
+      .closest("section");
+
+    expect(getRecentReviews).toHaveBeenCalledOnce();
+    expect(section).not.toBeNull();
+    expect(
+      within(section!).getByText("新着レビューの本文です。"),
+    ).toBeInTheDocument();
+    expect(
+      within(section!).getByText("新着レビュー投稿者"),
+    ).toBeInTheDocument();
+    expect(within(section!).getByText("★★★★")).toBeInTheDocument();
   });
 });
