@@ -6,6 +6,7 @@ export type WorkSectionProps = {
   title: string;
   subtitle: string;
   works: Work[];
+  moreHref?: string;
 };
 
 /**
@@ -16,14 +17,15 @@ export default function WorkSection({
   title,
   subtitle,
   works,
+  moreHref,
 }: WorkSectionProps) {
   return (
     <section>
-      <SectionHeading title={title} subtitle={subtitle} showMoreLink />
+      <SectionHeading title={title} subtitle={subtitle} moreHref={moreHref} />
 
       <div className="flex gap-4 overflow-x-auto pb-4">
         {works.map((work) => (
-          <WorkCard key={work.id} work={work} />
+          <WorkCard key={`${work.mediaType}-${work.id}`} work={work} />
         ))}
       </div>
     </section>

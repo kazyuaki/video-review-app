@@ -1,11 +1,9 @@
 import Link from "next/link";
 
-const WORK_SEARCH_PATH = "/works/search";
-
 type SectionHeadingProps = {
   title: string;
   subtitle: string;
-  showMoreLink?: boolean;
+  moreHref?: string;
 };
 
 /**
@@ -15,7 +13,7 @@ type SectionHeadingProps = {
 export default function SectionHeading({
   title,
   subtitle,
-  showMoreLink = false,
+  moreHref,
 }: SectionHeadingProps) {
   return (
     <div className="mb-6 flex items-end justify-between">
@@ -27,9 +25,9 @@ export default function SectionHeading({
         <h2 className="mt-2 text-2xl font-bold text-white">{title}</h2>
       </div>
 
-      {showMoreLink && (
+      {moreHref && (
         <Link
-          href={WORK_SEARCH_PATH}
+          href={moreHref}
           className="text-sm font-semibold text-indigo-300 transition hover:text-indigo-200"
         >
           もっと見る →
