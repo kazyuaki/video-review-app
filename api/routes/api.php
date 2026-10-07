@@ -9,6 +9,10 @@ use App\Http\Controllers\Review\IndexWorkReviewsController;
 use App\Http\Controllers\Review\ShowOwnWorkReviewController;
 use App\Http\Controllers\Review\StoreWorkReviewController;
 use App\Http\Controllers\Review\UpdateOwnWorkReviewController;
+use App\Http\Controllers\ViewingRecord\DeleteOwnViewingRecordController;
+use App\Http\Controllers\ViewingRecord\IndexViewingRecordsController;
+use App\Http\Controllers\ViewingRecord\StoreViewingRecordController;
+use App\Http\Controllers\ViewingRecord\UpdateViewingRecordController;
 use App\Http\Controllers\Work\SearchWorkController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +42,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    // ログイン中ユーザーのマイリストを取得
+    Route::get('/viewing-records', IndexViewingRecordsController::class);
+    // マイリストへ作品を登録
+    Route::post(
+        '/works/{mediaType}/{tmdbId}/viewing-records',
+        StoreViewingRecordController::class,
+    )->whereIn('mediaType', ['movie', 'tv'])
+        ->whereNumber('tmdbId');
+    // 自分の視聴記録を更新
+    Route::put(
+        '/works/{mediaType}/{tmdbId}/viewing-records/me',
+        UpdateViewingRecordController::class,
+    )->whereIn('mediaType', ['movie', 'tv'])
+        ->whereNumber('tmdbId');
+    // 自分の視聴記録を削除
+    Route::delete(
+        '/works/{mediaType}/{tmdbId}/viewing-records/me',
+        DeleteOwnViewingRecordController::class,
+    )->whereIn('mediaType', ['movie', 'tv'])
+        ->whereNumber('tmdbId');
 
     // 自身のレビューを取得
     Route::get(
