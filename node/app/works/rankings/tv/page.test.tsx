@@ -42,7 +42,12 @@ describe("TvRankingPage", () => {
     expect(getPopularTvShowsPage).toHaveBeenCalledWith(1);
 
     expect(
-      screen.getByRole("heading", { name: "TVシリーズランキング" }),
+      screen.getByRole("heading", { name: "日本で配信中の人気TVシリーズ" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "日本で定額・無料・広告付き配信されているTVシリーズを人気順に表示します。",
+      ),
     ).toBeInTheDocument();
 
     const tvCard = screen.getByText("人気TVシリーズ").closest("a");

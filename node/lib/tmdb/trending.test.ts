@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getTrendingWorks } from "./trending";
 
 /**
- * 話題の作品取得処理のテスト。
+ * 世界で話題の作品取得処理のテスト。
  * 映画とTVシリーズを作品情報へ変換し、人物を除外できることを確認する。
  */
 describe("getTrendingWorks", () => {

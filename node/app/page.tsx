@@ -45,19 +45,19 @@ export default async function Home() {
 
   const workSections = [
     {
-      title: "映画ランキング",
+      title: "日本で配信中の人気映画",
       subtitle: "MOVIE RANKING",
       works: popularMovies,
       moreHref: "/works/rankings/movie",
     },
     {
-      title: "TVシリーズランキング",
+      title: "日本で配信中の人気TVシリーズ",
       subtitle: "TV SERIES RANKING",
       works: popularTvShows,
       moreHref: "/works/rankings/tv",
     },
     {
-      title: "話題の作品",
+      title: "世界で話題の作品",
       subtitle: "TRENDING WORKS",
       works: trendingWorks,
       moreHref: "/works/trending",

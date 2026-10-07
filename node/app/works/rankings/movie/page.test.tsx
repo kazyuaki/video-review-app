@@ -42,7 +42,12 @@ describe("MovieRankingPage", () => {
     expect(getPopularMoviesPage).toHaveBeenCalledWith(1);
 
     expect(
-      screen.getByRole("heading", { name: "映画ランキング" }),
+      screen.getByRole("heading", { name: "日本で配信中の人気映画" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "日本で定額・無料・広告付き配信されている映画を人気順に表示します。",
+      ),
     ).toBeInTheDocument();
 
     const movieCard = screen.getByText("人気映画").closest("a");

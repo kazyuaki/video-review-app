@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getPopularMovies } from "./movies";
 
 /**
- * 人気映画取得処理のテスト。
+ * 日本で視聴可能な人気映画取得処理のテスト。
  * TMDBのレスポンスをアプリ内で扱う作品情報へ変換できることを確認する。
  */
 describe("getPopularMovies", () => {
@@ -16,7 +16,7 @@ describe("getPopularMovies", () => {
     delete process.env.TMDB_API_TOKEN;
   });
 
-  it("人気映画をWork形式に変換して取得できる", async () => {
+  it("日本で視聴可能な人気映画をWork形式に変換して取得できる", async () => {
     const fetchMock = vi.spyOn(global, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
@@ -43,7 +43,7 @@ describe("getPopularMovies", () => {
     const result = await getPopularMovies();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://api.themoviedb.org/3/movie/popular?language=ja-JP&page=1",
+      "https://api.themoviedb.org/3/discover/movie?language=ja-JP&page=1&watch_region=JP&with_watch_monetization_types=flatrate|free|ads&sort_by=popularity.desc",
       expect.objectContaining({
         headers: expect.objectContaining({
           Authorization: "Bearer test-token",

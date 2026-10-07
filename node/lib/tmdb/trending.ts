@@ -10,7 +10,7 @@ export type TrendingWorksResult = {
 };
 
 /**
- * TMDBから話題の作品を取得する。
+ * TMDBから世界で話題の作品を取得する。
  * 映画とTVシリーズの週間トレンドを取得し、先頭10件を返す。
  */
 export async function getTrendingWorks(): Promise<Work[]> {
@@ -31,15 +31,11 @@ export async function getTrendingWorksPage(
 
   return {
     works: data.results
-      .filter(
-        (work) => work.media_type === "movie" || work.media_type === "tv",
-      )
+      .filter((work) => work.media_type === "movie" || work.media_type === "tv")
       .map((work) => ({
         id: work.id,
         title:
-          work.media_type === "movie"
-            ? (work.title ?? "")
-            : (work.name ?? ""),
+          work.media_type === "movie" ? (work.title ?? "") : (work.name ?? ""),
         mediaType: work.media_type,
         releaseYear:
           work.media_type === "movie"

@@ -9,7 +9,7 @@ vi.mock("@/lib/tmdb", () => ({
 }));
 
 /**
- * 話題の作品一覧画面を検証する。
+ * 世界で話題の作品一覧画面を検証する。
  */
 describe("TrendingWorksPage", () => {
   beforeEach(() => {
@@ -48,7 +48,10 @@ describe("TrendingWorksPage", () => {
     expect(getTrendingWorksPage).toHaveBeenCalledWith(1);
 
     expect(
-      screen.getByRole("heading", { name: "話題の作品" }),
+      screen.getByRole("heading", { name: "世界で話題の作品" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("TMDBで世界的に話題の映画・TVシリーズを表示します。"),
     ).toBeInTheDocument();
 
     expect(screen.getByText("話題の映画")).toBeInTheDocument();

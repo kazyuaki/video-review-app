@@ -21,7 +21,7 @@ vi.mock("@/lib/reviews", () => ({
 
 /**
  * トップページ作品表示のテスト。
- * 人気映画、人気TVシリーズ、話題の作品が画面に表示されることを確認する。
+ * 人気映画、人気TVシリーズ、世界で話題の作品が画面に表示されることを確認する。
  */
 describe("Home", () => {
   beforeEach(() => {
@@ -86,7 +86,7 @@ describe("Home", () => {
     render(await Home());
 
     const section = screen
-      .getByRole("heading", { name: "映画ランキング" })
+      .getByRole("heading", { name: "日本で配信中の人気映画" })
       .closest("section");
 
     expect(getPopularMovies).toHaveBeenCalledOnce();
@@ -103,7 +103,7 @@ describe("Home", () => {
     render(await Home());
 
     const section = screen
-      .getByRole("heading", { name: "TVシリーズランキング" })
+      .getByRole("heading", { name: "日本で配信中の人気TVシリーズ" })
       .closest("section");
 
     expect(getPopularTvShows).toHaveBeenCalledOnce();
@@ -120,7 +120,7 @@ describe("Home", () => {
     render(await Home());
 
     const section = screen
-      .getByRole("heading", { name: "話題の作品" })
+      .getByRole("heading", { name: "世界で話題の作品" })
       .closest("section");
 
     expect(getTrendingWorks).toHaveBeenCalledOnce();
@@ -134,13 +134,13 @@ describe("Home", () => {
     render(await Home());
 
     const movieSection = screen
-      .getByRole("heading", { name: "映画ランキング" })
+      .getByRole("heading", { name: "日本で配信中の人気映画" })
       .closest("section");
     const tvSection = screen
-      .getByRole("heading", { name: "TVシリーズランキング" })
+      .getByRole("heading", { name: "日本で配信中の人気TVシリーズ" })
       .closest("section");
     const trendingSection = screen
-      .getByRole("heading", { name: "話題の作品" })
+      .getByRole("heading", { name: "世界で話題の作品" })
       .closest("section");
 
     expect(movieSection).not.toBeNull();
