@@ -10,7 +10,7 @@ export type PopularMoviesResult = {
 };
 
 /**
- * TMDBから人気映画を取得する。
+ * TMDBから日本で視聴可能な人気映画を取得する。
  * 日本語の作品情報を取得し、先頭10件を返す。
  */
 export async function getPopularMovies(): Promise<Work[]> {
@@ -20,13 +20,13 @@ export async function getPopularMovies(): Promise<Work[]> {
 }
 
 /**
- * TMDBから人気映画をページ単位で取得する。
+ * TMDBから日本で視聴可能な人気映画をページ単位で取得する。
  */
 export async function getPopularMoviesPage(
   page = 1,
 ): Promise<PopularMoviesResult> {
   const data = await fetchTmdb<TmdbSearchResponse<TmdbMovie>>(
-    `/movie/popular?language=ja-JP&page=${page}`,
+    `/discover/movie?language=ja-JP&page=${page}&watch_region=JP&with_watch_monetization_types=flatrate|free|ads&sort_by=popularity.desc`,
   );
 
   return {

@@ -22,8 +22,8 @@ export default async function MovieRankingPage({
   return (
     <WorkListPage
       eyebrow="MOVIE RANKING"
-      title="映画ランキング"
-      description="TMDBで人気の映画をランキング形式で表示します。"
+      title="日本で配信中の人気映画"
+      description="日本で定額・無料・広告付き配信されている映画を人気順に表示します。"
       works={result.works}
       currentPage={result.currentPage}
       totalPages={result.totalPages}

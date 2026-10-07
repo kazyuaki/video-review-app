@@ -10,7 +10,7 @@ export type PopularTvShowsResult = {
 };
 
 /**
- * TMDBから人気のTVシリーズを取得する。
+ * TMDBから日本で視聴可能な人気のTVシリーズを取得する。
  * 日本語の作品情報を取得し、先頭10件を返す。
  */
 export async function getPopularTvShows(): Promise<Work[]> {
@@ -20,13 +20,13 @@ export async function getPopularTvShows(): Promise<Work[]> {
 }
 
 /**
- * TMDBから人気TVシリーズをページ単位で取得する。
+ * TMDBから日本で視聴可能な人気TVシリーズをページ単位で取得する。
  */
 export async function getPopularTvShowsPage(
   page = 1,
 ): Promise<PopularTvShowsResult> {
   const data = await fetchTmdb<TmdbSearchResponse<TmdbTvShow>>(
-    `/tv/popular?language=ja-JP&page=${page}`,
+    `/discover/tv?language=ja-JP&page=${page}&watch_region=JP&with_watch_monetization_types=flatrate|free|ads&sort_by=popularity.desc`,
   );
 
   return {

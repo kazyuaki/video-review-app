@@ -13,7 +13,7 @@ type WorkListPageProps = {
 };
 
 /**
- * ランキング・話題の作品一覧画面の共通レイアウトを表示する。
+ * ランキング・世界で話題の作品一覧画面の共通レイアウトを表示する。
  */
 export default function WorkListPage({
   eyebrow,

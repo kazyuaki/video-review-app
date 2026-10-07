@@ -8,7 +8,7 @@ type TrendingWorksPageProps = {
 };
 
 /**
- * 話題の作品一覧画面を表示する。
+ * 世界で話題の作品一覧画面を表示する。
  */
 export default async function TrendingWorksPage({
   searchParams,
@@ -22,8 +22,8 @@ export default async function TrendingWorksPage({
   return (
     <WorkListPage
       eyebrow="TRENDING WORKS"
-      title="話題の作品"
-      description="TMDBで話題の映画・TVシリーズを表示します。"
+      title="世界で話題の作品"
+      description="TMDBで世界的に話題の映画・TVシリーズを表示します。"
       works={result.works}
       currentPage={result.currentPage}
       totalPages={result.totalPages}
