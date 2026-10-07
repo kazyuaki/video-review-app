@@ -11,6 +11,7 @@ use App\Http\Controllers\Review\StoreWorkReviewController;
 use App\Http\Controllers\Review\UpdateOwnWorkReviewController;
 use App\Http\Controllers\ViewingRecord\DeleteOwnViewingRecordController;
 use App\Http\Controllers\ViewingRecord\IndexViewingRecordsController;
+use App\Http\Controllers\ViewingRecord\ShowOwnViewingRecordController;
 use App\Http\Controllers\ViewingRecord\StoreViewingRecordController;
 use App\Http\Controllers\ViewingRecord\UpdateViewingRecordController;
 use App\Http\Controllers\Work\SearchWorkController;
@@ -49,6 +50,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post(
         '/works/{mediaType}/{tmdbId}/viewing-records',
         StoreViewingRecordController::class,
+    )->whereIn('mediaType', ['movie', 'tv'])
+        ->whereNumber('tmdbId');
+    // 自分の指定作品に対する視聴記録を取得
+    Route::get(
+        '/works/{mediaType}/{tmdbId}/viewing-records/me',
+        ShowOwnViewingRecordController::class,
     )->whereIn('mediaType', ['movie', 'tv'])
         ->whereNumber('tmdbId');
     // 自分の視聴記録を更新

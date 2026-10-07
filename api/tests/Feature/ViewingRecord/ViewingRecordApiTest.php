@@ -310,4 +310,60 @@ class ViewingRecordApiTest extends TestCase
                 'title' => '他人の登録作品',
             ]);
     }
+
+    #[Test]
+    public function 自身の視聴記録を取得できる(): void
+    {
+        $user = User::factory()->create();
+
+        $work = Work::query()->create([
+            'tmdb_id' => 12345,
+            'media_type' => 'movie',
+            'title' => 'テスト映画',
+        ]);
+
+        $viewingRecord = ViewingRecord::query()->create([
+            'user_id' => $user->id,
+            'work_id' => $work->id,
+            'status' => 'watching',
+            'vod_service' => 'Netflix',
+            'started_at' => '2026-10-01',
+        ]);
+
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson(
+            '/api/works/movie/12345/viewing-records/me',
+        );
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('id', $viewingRecord->id)
+            ->assertJsonPath('status', 'watching')
+            ->assertJsonPath('vodService', 'Netflix')
+            ->assertJsonPath('startedAt', '2026-10-01')
+            ->assertJsonPath('watchedAt', null);
+    }
+
+    #[Test]
+    public function 未登録の作品の視聴記録は取得できない(): void
+    {
+        $user = User::factory()->create();
+
+        Work::query()->create([
+            'tmdb_id' => 12345,
+            'media_type' => 'movie',
+            'title' => 'テスト映画',
+        ]);
+
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson(
+            '/api/works/movie/12345/viewing-records/me',
+        );
+
+        $response
+            ->assertNotFound()
+            ->assertJsonPath('message', '視聴記録が見つかりません。');
+    }
 }
