@@ -7,6 +7,7 @@ import { WorkDetailHero } from "@/components/work-detail/WorkDetailHero";
 import { WorkCastSection } from "@/components/work-detail/WorkCastSection";
 import { WorkStreamingSection } from "@/components/work-detail/WorkStreamingSection";
 import { TmdbApiError } from "@/lib/tmdb/client";
+import { WorkViewingRecordArea } from "@/components/viewing-record/WorkViewingRecordArea";
 
 type WorkDetailPageProps = {
   params: Promise<{
@@ -66,8 +67,13 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
       <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
         <WorkCastSection cast={work.cast} />
 
-        <WorkStreamingSection
-          streamingServices={work.streamingServices}
+        <WorkStreamingSection streamingServices={work.streamingServices} />
+
+        <WorkViewingRecordArea
+          mediaType={work.mediaType}
+          tmdbId={work.id}
+          title={work.title}
+          posterPath={work.posterPath}
         />
 
         <WorkReviewArea

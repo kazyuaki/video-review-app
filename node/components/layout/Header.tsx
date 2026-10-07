@@ -75,6 +75,13 @@ export function Header() {
                 {user.name}
               </span>
 
+              <Link
+                href="/my-list"
+                className="whitespace-nowrap rounded-lg px-2 py-2 text-xs text-slate-300 transition hover:bg-slate-800 hover:text-sky-400 sm:px-3 sm:text-sm"
+              >
+                マイリスト
+              </Link>
+
               <button
                 type="button"
                 onClick={handleLogout}
