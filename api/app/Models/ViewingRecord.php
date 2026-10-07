@@ -13,7 +13,7 @@ class ViewingRecord extends Model
     protected $fillable = [
         'user_id',
         'work_id', // TMDB IDではなく、works テーブルの内部ID
-        'status',
+        'status', // 視聴状況: want_to_watch（観たい）、watching（視聴中）、watched（視聴済み）、dropped（中断）
         'vod_service', // 視聴に利用した配信サービス名
         'started_at',
         'watched_at',
