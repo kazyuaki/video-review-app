@@ -34,6 +34,14 @@ class StoreViewingRecordController extends Controller
             ],
         );
 
+        $posterPath = $validated['poster_path'] ?? null;
+
+        if ($work->poster_path === null && $posterPath !== null) {
+            $work->update([
+                'poster_path' => $posterPath,
+            ]);
+        }
+
         $alreadyRegistered = ViewingRecord::query()
             ->where('user_id', $request->user()->id)
             ->where('work_id', $work->id)

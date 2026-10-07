@@ -25,6 +25,7 @@ class ViewingRecordApiTest extends TestCase
             '/api/works/movie/12345/viewing-records',
             [
                 'title' => 'テスト映画',
+                'poster_path' => '/test-poster.jpg',
                 'status' => 'want_to_watch',
             ],
         );
@@ -41,12 +42,45 @@ class ViewingRecordApiTest extends TestCase
         $this->assertDatabaseHas('works', [
             'id' => $work->id,
             'title' => 'テスト映画',
+            'poster_path' => '/test-poster.jpg',
         ]);
 
         $this->assertDatabaseHas('viewing_records', [
             'user_id' => $user->id,
             'work_id' => $work->id,
             'status' => 'want_to_watch',
+        ]);
+    }
+
+    #[Test]
+    public function 既存作品の空のポスターを補完して登録できる(): void
+    {
+        $user = User::factory()->create();
+
+        $work = Work::query()->create([
+            'tmdb_id' => 12345,
+            'media_type' => 'movie',
+            'title' => '既存のテスト映画',
+            'poster_path' => null,
+        ]);
+
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson(
+            '/api/works/movie/12345/viewing-records',
+            [
+                'title' => 'リクエストの作品タイトル',
+                'poster_path' => '/filled-poster.jpg',
+                'status' => 'want_to_watch',
+            ],
+        );
+
+        $response->assertCreated();
+
+        $this->assertDatabaseHas('works', [
+            'id' => $work->id,
+            'title' => '既存のテスト映画',
+            'poster_path' => '/filled-poster.jpg',
         ]);
     }
 

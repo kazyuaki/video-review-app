@@ -53,4 +53,24 @@ describe("Header", () => {
     expect(pushMock).toHaveBeenCalledWith("/");
     expect(refreshMock).toHaveBeenCalled();
   });
+
+  test("NF030 ログイン中はマイリストへのリンクを表示する", async () => {
+    apiGetMock.mockResolvedValue({
+      data: {
+        id: 1,
+        name: "テストユーザー",
+        email: "test@example.com",
+      },
+    });
+
+    render(
+      <AuthProvider>
+        <Header />
+      </AuthProvider>,
+    );
+
+    expect(
+      await screen.findByRole("link", { name: "マイリスト" }),
+    ).toHaveAttribute("href", "/my-list");
+  });
 });
