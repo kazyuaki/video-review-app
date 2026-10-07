@@ -20,6 +20,8 @@ describe("getPopularMovies", () => {
     const fetchMock = vi.spyOn(global, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
+          page: 1,
+          total_pages: 500,
           results: [
             {
               id: 101,

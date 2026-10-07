@@ -7,7 +7,7 @@ import WorkSearchLoading from "./loading";
  * 作品検索画面のローディング表示をテストする。
  */
 describe("WorkSearchLoading", () => {
-  // NF014: API通信中の状態を表示できる
+  // NF019: API通信中の状態を表示できる
   it("作品検索画面の読み込み中メッセージを表示できる", () => {
     render(<WorkSearchLoading />);
 

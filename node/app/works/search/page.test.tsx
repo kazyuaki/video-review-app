@@ -54,7 +54,7 @@ describe("WorkSearchPage", () => {
     });
   });
 
-  // NF012: 検索結果に作品情報を表示できる
+  // NF017: 検索結果に作品情報を表示できる
   it("検索結果のポスター、作品名、公開年、作品種別を表示できる", async () => {
     render(
       await WorkSearchPage({
@@ -77,7 +77,7 @@ describe("WorkSearchPage", () => {
     expect(screen.getByText("2024・TVシリーズ")).toBeInTheDocument();
   });
 
-  // NF013: 検索結果が0件の場合の表示ができる
+  // NF018: 検索結果が0件の場合の表示ができる
   it("検索結果が0件の場合の表示ができる", async () => {
     vi.mocked(searchWorks).mockResolvedValue({
       works: [],

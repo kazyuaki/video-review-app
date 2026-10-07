@@ -1,26 +1,48 @@
 import { fetchTmdb } from "@/lib/tmdb/client";
 import type { Work } from "@/types/work";
 
-import type { TmdbMovie, TmdbMovieResponse, TmdbSearchResponse } from "./types";
+import type { TmdbMovie, TmdbSearchResponse } from "./types";
+
+export type PopularMoviesResult = {
+  works: Work[];
+  currentPage: number;
+  totalPages: number;
+};
+
 /**
  * TMDBから人気映画を取得する。
  * 日本語の作品情報を取得し、先頭10件を返す。
  */
 export async function getPopularMovies(): Promise<Work[]> {
-  const data = await fetchTmdb<TmdbMovieResponse>(
-    "/movie/popular?language=ja-JP&page=1",
+  const result = await getPopularMoviesPage();
+
+  return result.works.slice(0, 10);
+}
+
+/**
+ * TMDBから人気映画をページ単位で取得する。
+ */
+export async function getPopularMoviesPage(
+  page = 1,
+): Promise<PopularMoviesResult> {
+  const data = await fetchTmdb<TmdbSearchResponse<TmdbMovie>>(
+    `/movie/popular?language=ja-JP&page=${page}`,
   );
 
-  return data.results.slice(0, 10).map((movie, index) => ({
-    id: movie.id,
-    title: movie.title,
-    mediaType: "movie",
-    releaseYear: movie.release_date
-      ? movie.release_date.slice(0, 4)
-      : undefined,
-    rank: index + 1,
-    posterPath: movie.poster_path,
-  }));
+  return {
+    works: data.results.map((movie, index) => ({
+      id: movie.id,
+      title: movie.title,
+      mediaType: "movie",
+      releaseYear: movie.release_date
+        ? movie.release_date.slice(0, 4)
+        : undefined,
+      rank: (data.page - 1) * 20 + index + 1,
+      posterPath: movie.poster_path,
+    })),
+    currentPage: data.page,
+    totalPages: data.total_pages,
+  };
 }
 
 export type GenreMoviesResult = {

@@ -51,7 +51,7 @@ describe("WorkReviewListPage", () => {
     });
   });
 
-  // NF032: 新着レビュー一覧を表示できる
+  // NF037: 新着レビュー一覧を表示できる
   it("作品情報、投稿者、評価、本文を表示できる", async () => {
     render(
       await WorkReviewListPage({
@@ -81,7 +81,7 @@ describe("WorkReviewListPage", () => {
     expect(screen.getByText("1件")).toBeInTheDocument();
   });
 
-  // NF033: ページ切り替えで次のレビューを取得できる
+  // NF038: ページ切り替えで次のレビューを取得できる
   it("2ページ目を指定すると、2ページ目のレビューを表示できる", async () => {
     vi.mocked(getWorkReviews).mockResolvedValue({
       averageRating: 4,

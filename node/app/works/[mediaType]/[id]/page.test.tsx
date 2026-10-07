@@ -68,7 +68,7 @@ describe("WorkDetailPage", () => {
     });
   });
 
-  // NF015: 作品の詳細情報を表示できる
+  // NF020: 作品の詳細情報を表示できる
   it("作品の画像、タイトル、概要、公開年、ジャンル、出演者を表示できる", async () => {
     render(
       await WorkDetailPage({
@@ -99,7 +99,7 @@ describe("WorkDetailPage", () => {
     expect(screen.getByText("主人公")).toBeInTheDocument();
   });
 
-  // NF016: 作品に紐づくレビューを表示できる
+  // NF021: 作品に紐づくレビューを表示できる
   it("作品に紐づくレビューの投稿者、評価、本文、投稿日を表示できる", async () => {
     vi.mocked(getWorkReviews).mockResolvedValue({
       averageRating: 4.0,
@@ -141,7 +141,7 @@ describe("WorkDetailPage", () => {
     expect(screen.getByText("1件")).toBeInTheDocument();
   });
 
-  // NF017: 存在しない作品では作品が見つからない画面を表示する
+  // NF022: 存在しない作品では作品が見つからない画面を表示する
   it("TMDB APIが404を返した場合はnotFoundを呼び出す", async () => {
     const notFoundError = new Error("NEXT_NOT_FOUND");
 

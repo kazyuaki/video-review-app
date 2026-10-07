@@ -129,7 +129,38 @@ describe("Home", () => {
     expect(within(section!).getByText("話題のTVシリーズ")).toBeInTheDocument();
   });
 
-  // NF036: 新着レビューを表示できる
+  // NF011: 各作品セクションから対応する一覧画面へ遷移できる
+  it("各作品セクションに対応する一覧画面へのリンクを表示できる", async () => {
+    render(await Home());
+
+    const movieSection = screen
+      .getByRole("heading", { name: "映画ランキング" })
+      .closest("section");
+    const tvSection = screen
+      .getByRole("heading", { name: "TVシリーズランキング" })
+      .closest("section");
+    const trendingSection = screen
+      .getByRole("heading", { name: "話題の作品" })
+      .closest("section");
+
+    expect(movieSection).not.toBeNull();
+    expect(tvSection).not.toBeNull();
+    expect(trendingSection).not.toBeNull();
+
+    expect(
+      within(movieSection!).getByRole("link", { name: "もっと見る →" }),
+    ).toHaveAttribute("href", "/works/rankings/movie");
+
+    expect(
+      within(tvSection!).getByRole("link", { name: "もっと見る →" }),
+    ).toHaveAttribute("href", "/works/rankings/tv");
+
+    expect(
+      within(trendingSection!).getByRole("link", { name: "もっと見る →" }),
+    ).toHaveAttribute("href", "/works/trending");
+  });
+
+  // NF045: 新着レビューを表示できる
   it("新着レビューの本文、投稿者、評価を表示できる", async () => {
     render(await Home());
 

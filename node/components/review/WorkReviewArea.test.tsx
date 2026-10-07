@@ -63,7 +63,7 @@ describe("WorkReviewArea", () => {
     );
   }
 
-  // NF029: 他人のレビューには編集操作を表示しない
+  // NF034: 他人のレビューには編集操作を表示しない
   it("他人のレビューには編集ボタンと削除ボタンを表示しない", async () => {
     renderArea({
       ...reviewData,
@@ -88,7 +88,7 @@ describe("WorkReviewArea", () => {
     expect(screen.queryByRole("button", { name: "削除" })).not.toBeInTheDocument();
   });
 
-  // NF030: 確認後に自分のレビューを削除できる
+  // NF035: 確認後に自分のレビューを削除できる
   it("削除確認で確定すると削除APIを呼び出し、更新後の一覧からレビューが消える", async () => {
     const { rerender } = renderArea();
 
@@ -119,7 +119,7 @@ describe("WorkReviewArea", () => {
     expect(screen.queryByText("自分のレビューです。")).not.toBeInTheDocument();
   });
 
-  // NF031: 削除確認をキャンセルできる
+  // NF036: 削除確認をキャンセルできる
   it("削除確認をキャンセルすると削除APIを呼び出さず、レビューを表示し続ける", async () => {
     renderArea();
 

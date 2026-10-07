@@ -48,16 +48,19 @@ export default async function Home() {
       title: "映画ランキング",
       subtitle: "MOVIE RANKING",
       works: popularMovies,
+      moreHref: "/works/rankings/movie",
     },
     {
       title: "TVシリーズランキング",
       subtitle: "TV SERIES RANKING",
       works: popularTvShows,
+      moreHref: "/works/rankings/tv",
     },
     {
       title: "話題の作品",
       subtitle: "TRENDING WORKS",
       works: trendingWorks,
+      moreHref: "/works/trending",
     },
     {
       title: "おすすめ作品",
@@ -79,6 +82,7 @@ export default async function Home() {
             title={section.title}
             subtitle={section.subtitle}
             works={section.works}
+            moreHref={section.moreHref}
           />
         ))}
 
