@@ -43,3 +43,8 @@ export type ViewingRecord = OwnViewingRecord & {
 export type ViewingRecordsResponse = {
   viewingRecords: ViewingRecord[];
 };
+
+/**
+ * マイリストの視聴状況絞り込みで使う値。
+ */
+export type ViewingRecordStatusFilter = "all" | ViewingStatus;
